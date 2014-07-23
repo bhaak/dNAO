@@ -124,6 +124,8 @@ E int NDECL(newhp);
 E schar FDECL(acurr, (int));
 E schar NDECL(acurrstr);
 E void FDECL(adjalign, (int));
+E int NDECL(uhp);
+E int NDECL(uhpmax);
 
 /* ### ball.c ### */
 
@@ -524,11 +526,12 @@ E boolean FDECL(hurtle_step, (genericptr_t, int, int));
 E int FDECL(def_char_to_objclass, (CHAR_P));
 E int FDECL(def_char_to_monclass, (CHAR_P));
 #if !defined(MAKEDEFS_C) && !defined(LEV_LEX_C)
-E void FDECL(assign_graphics, (uchar *,int,int,int));
+E void FDECL(assign_graphics, (glyph_t *,int,int,int));
 E void FDECL(switch_graphics, (int));
 #ifdef REINCARNATION
 E void FDECL(assign_rogue_graphics, (BOOLEAN_P));
 #endif
+E void FDECL(assign_utf8graphics_symbol, (int, glyph_t));
 #ifdef USER_DUNGEONCOLOR
 E void FDECL(assign_colors, (uchar *,int,int,int));
 #endif
@@ -837,6 +840,7 @@ E char *FDECL(lcase, (char *));
 E char *FDECL(upstart, (char *));
 E char *FDECL(mungspaces, (char *));
 E char *FDECL(eos, (char *));
+E void FDECL(sanitizestr, (char *));
 E char *FDECL(strkitten, (char *,CHAR_P));
 E char *FDECL(s_suffix, (const char *));
 E char *FDECL(xcrypt, (const char *,char *));
@@ -1633,8 +1637,10 @@ E void NDECL(free_autopickup_exceptions);
 E boolean FDECL(add_menu_coloring, (char *));
 #endif /* MENU_COLOR */
 E boolean FDECL(parse_monster_color, (char *));
+E int FDECL(parse_codepoint, (char *));
 
 /* ### pager.c ### */
+
 E int NDECL(dowhatis);
 E int NDECL(doquickwhatis);
 E int NDECL(doidtrap);
@@ -2670,6 +2676,10 @@ E void NDECL(makewish);
 E void FDECL(costly_cancel, (struct obj *));
 
 #endif /* !MAKEDEFS_C && !LEV_LEX_C */
+
+/* ### unicode.c ### */
+E glyph_t FDECL(get_unicode_codepoint, (int));
+E int FDECL(pututf8char, (glyph_t));
 
 #undef E
 

@@ -1701,6 +1701,7 @@ int id_limit;
 			(void) identify(pick_list[i].item.a_obj);
 			u.uconduct.IDs++;
 		}
+	    first = 0;
 	    free((genericptr_t) pick_list);
 	    mark_synch(); /* Before we loop to pop open another menu */
 	} else if (n < 0) {
