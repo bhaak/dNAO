@@ -3,8 +3,8 @@
 ^A      Redo the previous command
 ^C      Quit the game
 ^D      Kick something (usually a door, chest, or box)
-^E      Search a room (available in debug mode only)
-^F      Map the level (available in debug mode only)
+^E      Engrave spirit seal
+^F      Fire active spirit powers
 ^G      Create a monster (available in debug mode only)
 ^I      Identify all items (available in debug mode only)
 ^O      Show location of special levels (available in debug mode only)
@@ -12,7 +12,7 @@
 ^R      Redraw screen
 ^T      Teleport around level
 ^V      Teleport between levels (available in debug mode only)
-^W      Wish (available in debug mode only)
+^W      Engrave Ward
 ^X      Show your attributes (intrinsic ones included in debug or explore mode)
 ^Z      Suspend game (only if defined)
 a       Apply (use) a tool
@@ -25,7 +25,7 @@ C       Call (name) a particular monster
 d       Drop an item
 D       Drop specific item types
 e       Eat something
-E       Engrave writing or a ward on the floor
+E       Engrave writing on the floor
 f       Fire ammunition from quiver
 F       Followed by direction, fight a monster (even if you don't sense it)
 g       Followed by direction, move until you are near something
@@ -55,7 +55,6 @@ p       Pay your shopping bill
 P       Put on an accessory (ring, amulet, etc)
 q       Quaff (drink) something (potion, water, etc)
 Q       Select ammunition for quiver
-^Q		Draw a ward.
 r       Read a scroll or spellbook
 R       Remove an accessory (ring, amulet, etc)
 s       Search for traps and secret doors
