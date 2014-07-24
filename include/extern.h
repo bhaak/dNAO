@@ -1083,7 +1083,7 @@ E boolean FDECL(propagate, (int, BOOLEAN_P,BOOLEAN_P));
 
 /* ### mapglyph.c ### */
 
-E void FDECL(mapglyph, (int, int *, int *, unsigned *, int, int));
+E void FDECL(mapglyph, (int, glyph_t *, int *, unsigned *, int, int));
 
 /* ### mcastu.c ### */
 
