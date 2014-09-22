@@ -3821,6 +3821,7 @@ arti_invoke(obj)
 		   }
 		}break;
 		case INFINITESPELLS:{
+			obj->ovar1 = SPE_FINGER_OF_DEATH; //Switches current spell to FoD. Fixes effects of this being given as a wizard crowning gift without FoD marked.
 			pline("The endless pages of the book cover the material of a spellbook of %s in exhaustive detail.",OBJ_NAME(objects[obj->ovar1]));
 			pline("Following the instructions on the pages, you cast the spell!");
 			spelleffects(0,FALSE,obj->ovar1);
