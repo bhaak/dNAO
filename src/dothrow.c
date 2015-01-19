@@ -16,7 +16,7 @@ STATIC_DCL void FDECL(breakobj, (struct obj *,XCHAR_P,XCHAR_P,BOOLEAN_P,BOOLEAN_
 STATIC_DCL void FDECL(breakmsg, (struct obj *,BOOLEAN_P));
 STATIC_DCL boolean FDECL(toss_up,(struct obj *, BOOLEAN_P));
 STATIC_DCL boolean FDECL(throwing_weapon, (struct obj *));
-STATIC_DCL void FDECL(sho_obj_return_to_u, (struct obj *obj));
+STATIC_DCL void FDECL(sho_obj_return_to_u, (struct obj *obj, int, int));
 STATIC_DCL boolean FDECL(mhurtle_step, (genericptr_t,int,int));
 
 
@@ -866,15 +866,17 @@ struct obj *obj;
 
 /* the currently thrown object is returning to you (not for boomerangs) */
 STATIC_OVL void
-sho_obj_return_to_u(obj)
+sho_obj_return_to_u(obj, destx, desty)
 struct obj *obj;
+int destx;
+int desty;
 {
     /* might already be our location (bounced off a wall) */
-    if (bhitpos.x != u.ux || bhitpos.y != u.uy) {
+    if (bhitpos.x != destx || bhitpos.y != desty) {
 	int x = bhitpos.x - u.dx, y = bhitpos.y - u.dy;
 
 	tmp_at(DISP_FLASH, obj_to_glyph(obj));
-	while(x != u.ux || y != u.uy) {
+	while(x != destx || y != desty) {
 	    tmp_at(x, y);
 	    delay_output();
 	    x -= u.dx; y -= u.dy;
@@ -893,6 +895,7 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 	register int range, urange;
 	boolean impaired = (Confusion || Stunned || Blind ||
 			   Hallucination || Fumbling);
+	int startX = u.ux, startY = u.uy;
 
        obj->was_thrown = 1;
 
@@ -1069,8 +1072,43 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 			  )
 		) {
 		    /* we must be wearing Gauntlets of Power to get here */
-		    if(obj->oartifact != ART_WINDRIDER) sho_obj_return_to_u(obj);	    /* display its flight */
+		    if(obj->oartifact != ART_WINDRIDER) sho_obj_return_to_u(obj, startX, startY);	    /* display its flight */
+			
+			if(obj->oartifact != ART_WINDRIDER && (u.ux != startX || u.uy != startY)){
+				if(flooreffects(obj,startX,startY,"fall")) return;
+				obj_no_longer_held(obj);
+				if (mon && mon->isshk && is_pick(obj)) {
+					if (cansee(startX, startY))
+					pline("%s snatches up %s.",
+						  Monnam(mon), the(xname(obj)));
+					if(*u.ushops)
+					check_shop_obj(obj, startX, startY, FALSE);
+					(void) mpickobj(mon, obj);	/* may merge and free obj */
+					thrownobj = (struct obj*)0;
+					return;
+				}
+				(void) snuff_candle(obj);
+				if (!mon && ship_object(obj, startX, startY, FALSE)) {
+					thrownobj = (struct obj*)0;
+					return;
+				}
+				thrownobj = (struct obj*)0;
+				place_object(obj, startX, startY);
+				if(*u.ushops && obj != uball)
+					check_shop_obj(obj, startX, startY, FALSE);
 
+				stackobj(obj);
+				if (obj == uball)
+					drop_ball(startX, startY);
+				if (cansee(startX, startY))
+					newsym(startX,startY);
+				if (obj_sheds_light(obj))
+					vision_full_recalc = 1;
+				if (!IS_SOFT(levl[startX][startY].typ))
+					container_impact_dmg(obj);
+				return;
+			}
+			
 		    if (!impaired && (obj->blessed || rn2(100))) {
 			pline("%s to your hand!", Tobjnam(obj, "return"));
 			obj = addinv(obj);
@@ -1238,6 +1276,7 @@ register struct obj   *obj;
 	register int	disttmp; /* distance modifier */
 	int otyp = obj->otyp;
 	boolean guaranteed_hit = (u.uswallow && mon == u.ustuck);
+	int startX = u.ux, startY = u.uy;
 
 	/* Differences from melee weapons:
 	 *
@@ -1319,7 +1358,7 @@ register struct obj   *obj;
 		    finish_quest(obj);	/* acknowledge quest completion */
 		    pline("%s %s %s back to you.", Monnam(mon),
 			  (next2u ? "hands" : "tosses"), the(xname(obj)));
-		    if (!next2u) sho_obj_return_to_u(obj);
+		    if (!next2u) sho_obj_return_to_u(obj,startX,startY);
 		    obj = addinv(obj);	/* back into your inventory */
 		    (void) encumber_msg();
 		} else {

@@ -2368,49 +2368,74 @@ register struct obj *atmp;
 {
 	register struct obj *otmp;
 #define DESTROY_ARM(o) ((otmp = (o)) != 0 && \
-			(!atmp || atmp == otmp) && \
-			(!obj_resists(otmp, 0, 90)))
+			(!atmp || atmp == otmp))
 
 	if (DESTROY_ARM(uarmc)) {
-		if (donning(otmp)) cancel_don();
-		Your("%s crumbles and turns to dust!",
-		     cloak_simple_name(uarmc));
-		(void) Cloak_off();
-		useup(otmp);
+		if((!obj_resists(otmp, 0, 100))){
+			if (donning(otmp)) cancel_don();
+			Your("%s crumbles and turns to dust!",
+				 cloak_simple_name(uarmc));
+			(void) Cloak_off();
+			useup(otmp);
+		} else {
+			Your("%s resists destruction!", cloak_simple_name(uarmc));
+		}
 	} else if (DESTROY_ARM(uarm)) {
-		if (donning(otmp)) cancel_don();
-		Your("armor turns to dust and falls to the %s!",
-			surface(u.ux,u.uy));
-		(void) Armor_gone();
-		useup(otmp);
-#ifdef TOURIST
+		if((!obj_resists(otmp, 0, 100))){
+			if (donning(otmp)) cancel_don();
+			Your("armor turns to dust and falls to the %s!",
+				surface(u.ux,u.uy));
+			(void) Armor_gone();
+			useup(otmp);
+		} else {
+			Your("armor resists destruction!");
+		}
 	} else if (DESTROY_ARM(uarmu)) {
-		if (donning(otmp)) cancel_don();
-		Your("shirt crumbles into tiny threads and falls apart!");
-		(void) Shirt_off();
-		useup(otmp);
-#endif
+		if((!obj_resists(otmp, 0, 100))){
+			if (donning(otmp)) cancel_don();
+			Your("shirt crumbles into tiny threads and falls apart!");
+			(void) Shirt_off();
+			useup(otmp);
+		} else {
+			Your("shirt resists destruction!");
+		}
 	} else if (DESTROY_ARM(uarmh)) {
-		if (donning(otmp)) cancel_don();
-		Your("helmet turns to dust and is blown away!");
-		(void) Helmet_off();
-		useup(otmp);
+		if((!obj_resists(otmp, 0, 100))){
+			if (donning(otmp)) cancel_don();
+			Your("helmet turns to dust and is blown away!");
+			(void) Helmet_off();
+			useup(otmp);
+		} else {
+			Your("helmet resists destruction!");
+		}
 	} else if (DESTROY_ARM(uarmg)) {
-		if (donning(otmp)) cancel_don();
-		Your("gloves vanish!");
-		(void) Gloves_off();
-		useup(otmp);
-		selftouch("You");
+		if((!obj_resists(otmp, 0, 100))){
+			if (donning(otmp)) cancel_don();
+			Your("gloves vanish!");
+			(void) Gloves_off();
+			useup(otmp);
+			selftouch("You");
+		} else {
+			Your("gloves resists destruction!");
+		}
 	} else if (DESTROY_ARM(uarmf)) {
-		if (donning(otmp)) cancel_don();
-		Your("boots disintegrate!");
-		(void) Boots_off();
-		useup(otmp);
+		if((!obj_resists(otmp, 0, 100))){
+			if (donning(otmp)) cancel_don();
+			Your("boots disintegrate!");
+			(void) Boots_off();
+			useup(otmp);
+		} else {
+			Your("boots resists destruction!");
+		}
 	} else if (DESTROY_ARM(uarms)) {
-		if (donning(otmp)) cancel_don();
-		Your("shield crumbles away!");
-		(void) Shield_off();
-		useup(otmp);
+		if((!obj_resists(otmp, 0, 100))){
+			if (donning(otmp)) cancel_don();
+			Your("shield crumbles away!");
+			(void) Shield_off();
+			useup(otmp);
+		} else {
+			Your("shield resists destruction!");
+		}
 	} else {
 		return 0;		/* could not destroy anything */
 	}
