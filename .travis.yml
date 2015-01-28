@@ -1,0 +1,7 @@
+language: bash
+
+script:
+    - bash compile.sh
+
+notifications:
+    irc: "chat.freenode.net#acehack.de"
