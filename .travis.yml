@@ -1,0 +1,9 @@
+language: bash
+
+script: "make PREFIX=/tmp/dnao CHGRP=true CHOWN=true install"
+
+notifications:
+  irc:
+    channels: "chat.freenode.net#acehack.de"
+    use_notice: true
+    skip_join: true
